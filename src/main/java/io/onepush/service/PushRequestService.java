@@ -78,7 +78,6 @@ public class PushRequestService {
         String appId = pushRequest.getAppId();
         List<String> as = pushRequest.getAudiences();
         PlatformType deviceType = pushRequest.getPlatform();
-        String listenFlag = pushRequest.getListenFlag();
         AudienceType audienceType = pushRequest.getAudienceType();
 
         if (AudienceType.ALIAS != audienceType) {
@@ -89,7 +88,6 @@ public class PushRequestService {
         if (!CollectionUtils.isEmpty(as) && !as.get(0).equalsIgnoreCase("ALL")) {
             params.put("alias",as);
         }
-        params.put("listenFlag",listenFlag);
         if (PlatformType.ALL != deviceType) {
             params.put("deviceType",deviceType);
         }

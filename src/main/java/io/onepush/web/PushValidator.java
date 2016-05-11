@@ -29,8 +29,6 @@ public class PushValidator implements Validator{
     public void validate(Object obj, Errors e) {
         ValidationUtils.rejectIfEmptyOrWhitespace(e, "appId", "field.required", new String[]{"appId"});
         ValidationUtils.rejectIfEmptyOrWhitespace(e, "platform", "field.required", new String[]{"platform"});
-        ValidationUtils.rejectIfEmptyOrWhitespace(e, "listenFlag", "field.required", new String[]{"listenFlag"});
-
 
         if (obj instanceof UserDevice) {
             ValidationUtils.rejectIfEmptyOrWhitespace(e, "alias", "field.required", new String[]{"alias"});

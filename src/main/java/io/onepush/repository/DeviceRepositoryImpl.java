@@ -37,8 +37,6 @@ public class DeviceRepositoryImpl implements DeviceRepositoryCustom<UserDevice, 
             Criteria c = null;
             if (key.equals("alias")) {
                 c = Criteria.where(key).in((Collection<String>)params.get(key));
-            } else if (key.equals("listenFlag")) {
-                c = CriteriaCreator.like(key,(String)params.get(key));
             } else {
                 c = Criteria.where(key).is(params.get(key));
             }

@@ -1,0 +1,26 @@
+spring:
+  jackson:
+    serialization-inclusion: non_null
+  # Mongodb
+  data:
+    mongodb:
+      uri: mongodb://10.51.111.9:27017/onepush
+
+security:
+  enable-csrf: false
+  basic:
+    path: /admin/**
+  user:
+    name: admin
+    password: secret
+management:
+  context-path: /admin
+  security:
+    role: SUPERUSER
+
+pushserver:
+  mode: BOTH # 在线和离线推送服务器(ONLINE,OFFLINE)
+  env: DEV #开发或正式
+
+server:
+  port: 8080

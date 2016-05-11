@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>推送消息</title>
+</head>
+<body>
+<label>service url：</label><br/>
+<input type="text" id="serviceUrl" value="localhost:8080"/>
+<input type="button" onclick="init()" value="连接" />
+<br/>
+
+<textarea id="msg" rows="5" cols="50">
+</textarea>
+<input type="button" onclick="send()" value="发送消息" />
+<p></p>
+<label>Connection Status:</label>
+<label id="connectionLabel"></label>
+<br/>
+<br/>
+<label>接收到的消息：</label><br/>
+<textarea id="writeMsg" rows="5" cols="50">
+</textarea>
+<br/>
+
+<script type="application/javascript">
+    function getServiceUrl() {
+        return document.getElementById("serviceUrl").value;
+    }
+    function init() {
+
+        var pushReq = {
+            "appId": "23c6d7aa3a444997b574d64594f2761e",
+            "appKey": "cb9edf5b052b47e2bace460b1696e5fe",
+            "platform": "ALL",
+            "audienceType": "ALIAS",
+            "audiences": ["testuser1"],
+            "extra": "testmsg",
+            "alert": " this is a alert",
+            "sound": "default",
+            "badge": 1,
+            "smsMessage": "sms message"
+        };
+
+        document.getElementById("msg").value = JSON.stringify(pushReq);
+        if (!window.fetch) {
+            alert("not support fetch api.")
+        }
+        reg();
+//        batchReg();
+
+    }
+
+
+    function send() {
+        var msg = document.getElementById("msg").value;
+        document.getElementById("writeMsg").value = "";
+//        alert(msg);
+        fetch("http://" + getServiceUrl() + "/msgpush/send",{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: msg
+        }).then(function(res) {
+            alert(res.statusText);
+        });
+
+    }
+
+    function batchReg() {
+        var count = 200;
+        for(var i=2;i<count;i++) {
+            reg(i);
+        }
+    }
+    function reg(i) {
+        if (!i) {
+            i = 1;
+        }
+        fetch("http://" + getServiceUrl() + "/msgpush/register",{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "alias": "testuser"+i,
+                "appId": "23c6d7aa3a444997b574d64594f2761e",
+                "platform": "ANDROID",
+                "nativeToken": "andToken0011"+i,
+                "tag": ["tag1","sz"]
+            })
+        }).then(function(res){
+            if (res.ok) {
+//                alert("registry successfully");
+                res.json().then(function(data){
+                    wsConn(data.id);
+                });
+            } else {
+                alert(res.statusText);
+            }
+        });
+    }
+
+    function wsConn(deviceId) {
+        var ws = new WebSocket("ws://" + getServiceUrl() + "/msgpush.ws?deviceId="+deviceId);
+        var connectionLabel = document.getElementById("connectionLabel");
+        var writeMsg = document.getElementById("writeMsg");
+
+        ws.onmessage = function(evt) {
+//            alert(evt.data);
+            writeMsg.value = evt.data;
+        };
+
+        ws.onclose = function(evt) {
+//            alert("ws close");
+            connectionLabel.innerHTML = "DisConnected";
+        };
+
+        ws.onopen = function(evt) {
+//            alert("ws open");
+            connectionLabel.innerHTML = "Connected";
+        };
+
+        ws.onerror = function(event) {
+            alert("error ocoure");
+        };
+    }
+
+</script>
+</body>
+</html>

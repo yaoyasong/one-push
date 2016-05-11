@@ -1,0 +1,7 @@
+build/
+    .idea
+    .gradle
+    local.properties
+    /push.log
+    /push-server.iml
+    .iml

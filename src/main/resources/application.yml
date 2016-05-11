@@ -4,7 +4,7 @@ spring:
   # Mongodb
   data:
     mongodb:
-      uri: mongodb://10.51.111.9:27017/onepush
+      uri: mongodb://localhost:27017/onepush
 
 security:
   enable-csrf: false

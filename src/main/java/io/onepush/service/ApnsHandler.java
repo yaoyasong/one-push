@@ -71,10 +71,4 @@ public class ApnsHandler {
         return service;
     }
 
-    public static void main(String[] args) {
-        ApnsHandler h = new ApnsHandler();
-        List<String> tokens = new ArrayList();
-        tokens.add("<4a41cc79 2a2ec50f 584ef312 ce8073d8 5312fa90 fc6f466e 2047872a b80266ab>");
-        h.pushMsg("E:\\appcert.p12","123456",tokens,"test from localhost","default",10);
-    }
 }
